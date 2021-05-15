@@ -1,7 +1,7 @@
 # costmap_depth_camera
 This is a costmap plugin forked from tsengapola/costmap_depth_camera
 
-I modified it to work on ROS kinetic.
+I modified it to work on ROS kinetic and downsample the point cloud to make it faster.
 
 The costmap publishing frequency is 10Hz on my PC with Intel® Xeon® E3 6th-Gen Core™ i7 CPU and 32 GB DDR4 memory. 
 
