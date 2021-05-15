@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+
+  <arg name="map_file" default="$(find costmap_depth_camera)/map/empty_box.yaml"/>
+    <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" output="screen">
+        <rosparam file="$(arg map_file)" command="load" />
+    </node>
+
+  <!-- Run the costmap node, load the yaml in our directory -->
+  <node name="costmap_node" pkg="costmap_2d" type="costmap_2d_node" output="screen">
+    <rosparam file="$(find costmap_depth_camera)/launch/costmap_depth_camera.yaml" command="load"/>
+  </node>
+
+<!---->
+  <node pkg="tf" type="static_transform_publisher" name="baselink2camera" args="0.0 0.0 0 0 0 0 /base_link /camera_link 100" output="screen" /> 
+
+  <node pkg="tf" type="static_transform_publisher" name="baselink2base_laser_link" args="0.0 0.0 0 0 0 0 /base_link /base_laser_link 100" output="screen" /> 
+<!--
+  <node pkg="tf" type="static_transform_publisher" name="baselink2map" args="0.0 0.0 1 0 0 0 map base_link 100" output="screen" /> 
+ -->
+
+<!-- Publish map to base_link tf using gyro data -->
+
+  <node name="imu_tf_node1" pkg="costmap_depth_camera" type="imu_tf.py" output="screen" /> 
+
+<!--
+  <node name="imu_tf_node2" pkg="costmap_depth_camera" type="imu_tf2.py" output="screen" />
+  <node name="imu_tf_node3" pkg="costmap_depth_camera" type="imu_tf3.py" output="screen" />
+-->
+  
+  <!-- Provide full connection from map to camera_link -->
+
+  <!--  **************** Visualisation ****************  -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d /home/nrc/.rviz/D455.rviz"/>
+
+</launch>
